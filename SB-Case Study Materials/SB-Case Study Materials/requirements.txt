@@ -11,3 +11,4 @@ matplotlib
 xgboost
 bayesian-optimization
 seaborn
+pytest

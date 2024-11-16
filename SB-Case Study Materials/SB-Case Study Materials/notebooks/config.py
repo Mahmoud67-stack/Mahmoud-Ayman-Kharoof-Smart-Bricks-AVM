@@ -44,69 +44,72 @@ DATA_FILES = {
     }
 }
 
-# Model parameters
+# Optimized Model parameters
 MODEL_PARAMS = {
     'xgboost': {
         'pbounds': {
-            'max_depth': (3, 8),
-            'learning_rate': (0.01, 0.2),
-            'n_estimators': (50, 300),
-            'min_child_weight': (1, 5),
-            'subsample': (0.7, 1.0),
+            'max_depth': (3, 6),
+            'learning_rate': (0.05, 0.15),
+            'n_estimators': (50, 150),
+            'min_child_weight': (1, 3),
+            'subsample': (0.8, 1.0),
         },
         'default_params': {
             'colsample_bytree': 0.8,
-            'objective': 'reg:squarederror'
+            'objective': 'reg:squarederror',
+            'tree_method': 'hist'
         }
     },
     'random_forest': {
         'pbounds': {
-            'n_estimators': (50, 300),
-            'max_depth': (5, 20),
-            'min_samples_split': (2, 10),
+            'n_estimators': (50, 100),
+            'max_depth': (3, 8),
+            'min_samples_split': (2, 8),
+            'min_samples_leaf': (1, 3)
         },
         'default_params': {
-            'min_samples_leaf': 2,
+            'random_state': 42,
             'n_jobs': -1,
-            'random_state': 42
+            'warm_start': True
         }
     },
     'svr': {
         'pbounds': {
-            'C': (0.1, 50),
-            'epsilon': (0.01, 0.5),
+            'C': (0.5, 10),
+            'epsilon': (0.05, 0.3),
         },
         'default_params': {
             'gamma': 'scale',
-            'kernel': 'rbf'
+            'kernel': 'rbf',
+            'cache_size': 1000
         }
     }
 }
 
-# Meta-learner parameters
+# Optimized Meta-learner parameters
 META_LEARNER_PARAMS = {
     'optimization': {
         'pbounds': {
             'num_hidden_layers': (1, 2),
-            'hidden_units': (16, 64),
-            'dropout_rate': (0.1, 0.3),
-            'learning_rate': (1e-3, 1e-2)
+            'hidden_units': (16, 32),
+            'dropout_rate': (0.1, 0.2),
+            'learning_rate': (1e-3, 5e-3)
         },
-        'init_points': 3,
-        'n_iter': 7
+        'init_points': 2,
+        'n_iter': 5
     },
     'training': {
         'validation_split': 0.2,
-        'epochs': 50,
-        'batch_size': 64,
+        'epochs': 30,
+        'batch_size': 128,
         'verbose': 1
     }
 }
 
-# Feature selection parameters
+# Simplified Feature selection parameters
 FEATURE_SELECTION = {
-    'correlation_threshold': 0.8,
-    'importance_features_count': 10,
+    'correlation_threshold': 0.85,
+    'importance_features_count': 8,
     'rfe_features_count': 5,
     'univariate_features_count': 5
 }
@@ -118,18 +121,18 @@ PREPROCESSING = {
     'scaling_method': 'robust'
 }
 
-# Logging configuration
+# Simplified Logging configuration
 LOGGING_CONFIG = {
     'level': 'INFO',
     'format': '%(asctime)s - %(levelname)s - %(message)s',
     'filename': os.path.join(LOGS_DIR, 'pipeline.log')
 }
 
-# Evaluation parameters
+# Simplified Evaluation parameters
 EVALUATION = {
-    'metrics': ['RMSE', 'R2', 'MAE', 'MSE', 'MAPE', 'Explained_Variance'],
+    'metrics': ['RMSE', 'R2', 'MAE'],
     'cv_folds': 3,
-    'plot_figsize': (10, 6)
+    'plot_figsize': (8, 5)
 }
 
 # Random seed for reproducibility

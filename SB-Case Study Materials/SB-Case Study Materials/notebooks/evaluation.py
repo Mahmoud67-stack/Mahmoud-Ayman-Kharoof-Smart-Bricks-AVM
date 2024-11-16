@@ -5,6 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+from config import EVALUATION, PLOTS_DIR, REPORTS_DIR, LOGS_DIR
 
 class ModelEvaluator:
     """Class to handle model evaluation metrics and visualization."""
@@ -19,11 +20,12 @@ class ModelEvaluator:
         self.model_type = model_type
         self.metrics = {}
         
-        # Set up logging
+        # Set up logging using config parameters
         self.logger = logging.getLogger(f'{model_type}_evaluator')
         if not self.logger.handlers:
             self.logger.setLevel(logging.INFO)
-            handler = logging.FileHandler(f'logs/{model_type}_evaluation.log')
+            os.makedirs(LOGS_DIR, exist_ok=True)
+            handler = logging.FileHandler(os.path.join(LOGS_DIR, f'{model_type}_evaluation.log'))
             formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
@@ -66,7 +68,7 @@ class ModelEvaluator:
             self.logger.error(f"Error calculating metrics: {str(e)}")
             raise
 
-    def plot_residuals(self, y_true, y_pred, save_dir='plots'):
+    def plot_residuals(self, y_true, y_pred, save_dir=PLOTS_DIR):
         """
         Create and save residual plots.
         
@@ -79,8 +81,8 @@ class ModelEvaluator:
             os.makedirs(save_dir, exist_ok=True)
             residuals = y_true - y_pred
             
-            # Create residual plot
-            plt.figure(figsize=(10, 6))
+            # Use config figure size
+            plt.figure(figsize=EVALUATION['plot_figsize'])
             plt.scatter(y_pred, residuals, alpha=0.5)
             plt.xlabel('Predicted Values')
             plt.ylabel('Residuals')
@@ -90,7 +92,7 @@ class ModelEvaluator:
             plt.close()
             
             # Create QQ plot
-            plt.figure(figsize=(10, 6))
+            plt.figure(figsize=EVALUATION['plot_figsize'])
             sns.histplot(residuals, kde=True)
             plt.title(f'Residuals Distribution - {self.model_type.capitalize()} Model')
             plt.xlabel('Residuals')
@@ -103,7 +105,7 @@ class ModelEvaluator:
             self.logger.error(f"Error creating residual plots: {str(e)}")
             raise
 
-    def plot_actual_vs_predicted(self, y_true, y_pred, save_dir='plots'):
+    def plot_actual_vs_predicted(self, y_true, y_pred, save_dir=PLOTS_DIR):
         """
         Create and save actual vs predicted scatter plot.
         
@@ -115,7 +117,7 @@ class ModelEvaluator:
         try:
             os.makedirs(save_dir, exist_ok=True)
             
-            plt.figure(figsize=(10, 6))
+            plt.figure(figsize=EVALUATION['plot_figsize'])
             plt.scatter(y_true, y_pred, alpha=0.5)
             
             # Add perfect prediction line
@@ -135,7 +137,7 @@ class ModelEvaluator:
             self.logger.error(f"Error creating actual vs predicted plot: {str(e)}")
             raise
 
-    def generate_evaluation_report(self, y_true, y_pred, output_dir='reports'):
+    def generate_evaluation_report(self, y_true, y_pred, output_dir=REPORTS_DIR):
         """
         Generate comprehensive evaluation report.
         
@@ -150,9 +152,22 @@ class ModelEvaluator:
             # Calculate metrics
             metrics = self.calculate_metrics(y_true, y_pred)
             
-            # Create plots
-            self.plot_residuals(y_true, y_pred)
-            self.plot_actual_vs_predicted(y_true, y_pred)
+            # Create plots using config directories
+            self.plot_residuals(y_true, y_pred, PLOTS_DIR)
+            self.plot_actual_vs_predicted(y_true, y_pred, PLOTS_DIR)
+            
+            # Generate report with configured metrics
+            report = f"""
+Model Evaluation Report - {self.model_type.capitalize()} Model
+================================================
+
+Metrics Summary:
+---------------
+"""
+            # Only include metrics specified in config
+            for metric in EVALUATION['metrics']:
+                if metric in metrics:
+                    report += f"{metric}: {metrics[metric]:.4f}\n"
             
             # Generate report
             report = f"""
@@ -209,24 +224,3 @@ def evaluate_model(y_true, y_pred, model_type):
     evaluator = ModelEvaluator(model_type)
     evaluator.generate_evaluation_report(y_true, y_pred)
     return evaluator.metrics
-
-if __name__ == "__main__":
-    # Example usage
-    from sklearn.datasets import make_regression
-    from sklearn.model_selection import train_test_split
-    from sklearn.ensemble import RandomForestRegressor
-    
-    # Generate sample data
-    X, y = make_regression(n_samples=1000, n_features=20, noise=0.1)
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-    
-    # Train a simple model
-    model = RandomForestRegressor()
-    model.fit(X_train, y_train)
-    y_pred = model.predict(X_test)
-    
-    # Evaluate the model
-    metrics = evaluate_model(y_test, y_pred, 'example')
-    print("\nExample Model Metrics:")
-    for metric, value in metrics.items():
-        print(f"{metric}: {value:.4f}") 

@@ -6,9 +6,10 @@ from sklearn.preprocessing import StandardScaler
 import joblib
 import os
 from bayes_opt import BayesianOptimization
+from config import META_LEARNER_PARAMS, MODELS_DIR, DATA_DIR
 
 class MetaLearner:
-    def __init__(self, base_models_dir, model_type):
+    def __init__(self, base_models_dir=MODELS_DIR, model_type='rent'):
         """
         Initialize MetaLearner with base models.
         model_type: 'rent' or 'sale'
@@ -56,15 +57,15 @@ class MetaLearner:
         
         return model
     
-    def optimize_meta_model(self, X, y, validation_split=0.2):
+    def optimize_meta_model(self, X, y, validation_split=META_LEARNER_PARAMS['training']['validation_split']):
         """Optimize meta-model hyperparameters using Bayesian Optimization"""
         X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=validation_split, random_state=42)
         
-        # Get base model predictions
+        # Get base model predictions once, outside the evaluation function
         X_train_meta = self._get_base_predictions(X_train)
         X_val_meta = self._get_base_predictions(X_val)
         
-        # Scale the predictions
+        # Scale the predictions once
         X_train_meta = self.scaler.fit_transform(X_train_meta)
         X_val_meta = self.scaler.transform(X_val_meta)
         
@@ -76,29 +77,29 @@ class MetaLearner:
                 learning_rate
             )
             
+            # Reduce epochs for optimization phase
             history = model.fit(
                 X_train_meta,
                 y_train,
                 validation_data=(X_val_meta, y_val),
-                epochs=20,
-                batch_size=64,
+                epochs=5,  # Reduced from 20
+                batch_size=128,  # Increased batch size
                 verbose=0
             )
             
             return -history.history['val_loss'][-1]
         
+        # Reduce optimization iterations
         optimizer = BayesianOptimization(
             f=evaluate_meta_model,
-            pbounds={
-                'num_hidden_layers': (1, 2),
-                'hidden_units': (16, 64),
-                'dropout_rate': (0.1, 0.3),
-                'learning_rate': (1e-3, 1e-2)
-            },
+            pbounds=META_LEARNER_PARAMS['optimization']['pbounds'],
             random_state=42
         )
         
-        optimizer.maximize(init_points=3, n_iter=7)
+        optimizer.maximize(
+            init_points=3,  # Reduced from default
+            n_iter=5       # Reduced from default
+        )
         return optimizer.max
     
     def fit(self, X, y):
@@ -119,7 +120,21 @@ class MetaLearner:
             learning_rate=best_params['params']['learning_rate']
         )
         
-        self.meta_model.fit(X_meta, y, epochs=50, batch_size=64, verbose=1)
+        # Add early stopping
+        early_stopping = tf.keras.callbacks.EarlyStopping(
+            monitor='loss',
+            patience=3,
+            restore_best_weights=True
+        )
+        
+        self.meta_model.fit(
+            X_meta, 
+            y, 
+            epochs=META_LEARNER_PARAMS['training']['epochs'],
+            batch_size=128,  # Increased batch size
+            verbose=META_LEARNER_PARAMS['training']['verbose'],
+            callbacks=[early_stopping]
+        )
         
     def predict(self, X):
         """Make predictions using the meta-learner"""
@@ -143,9 +158,9 @@ if __name__ == "__main__":
         print(f"\nTraining meta-learner for {model_type} data...")
         
         # Load data
-        data_path = os.path.join('..', 'data', 
+        data_path = os.path.join(DATA_DIR, 
                                f'snp_dld_2024_{model_type}{"s" if model_type == "rent" else "_transactions"}_cleaned.parquet')
-        target = 'annual_amount' if model_type == 'rent' else 'amount'
+        target = DATA_FILES[model_type]['target']
         
         # Get selected features
         data = load_data(data_path)

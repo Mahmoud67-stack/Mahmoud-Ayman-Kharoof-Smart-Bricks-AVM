@@ -57,11 +57,12 @@ def optimize_random_forest(X, y):
     """
     Optimize Random Forest hyperparameters using Bayesian Optimization.
     """
-    def rf_evaluate(n_estimators, max_depth, min_samples_split):
+    def rf_evaluate(n_estimators, max_depth, min_samples_split, min_samples_leaf):
         params = {
             'n_estimators': int(n_estimators),
             'max_depth': int(max_depth),
             'min_samples_split': int(min_samples_split),
+            'min_samples_leaf': int(min_samples_leaf),
             **MODEL_PARAMS['random_forest']['default_params']
         }
         

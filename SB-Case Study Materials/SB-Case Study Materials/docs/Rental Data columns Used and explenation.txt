@@ -1,0 +1,16 @@
+contract_start_date: This the date where the contract of the rental started at
+contract_end_date: This the date where the contract of the rental will end on
+version_number: This indicates the number of times the property was rented if 1 then it is the first time it is rented
+annual_amount: This indicates the amount per year for the rented property
+is_freehold: if the rental is freehold (t) or not (f)
+property_size_sqm: the size of the property is sqm
+property_type_en: this indicates the type of property rented.
+property_subtype: this indicates the sub type of property rented.
+property_usage_en : this indicates what is the usuage of the property is residential commercial and so on.
+rooms: Number of rooms
+parking: Number of Parkings
+project_name_en : project name
+area_en: area name
+nearest_landmark_en : nearest landmark
+nearest_metro_en : nearest metro
+nearest_mall_en: nearest mall

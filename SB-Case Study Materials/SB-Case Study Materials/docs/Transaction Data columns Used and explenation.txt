@@ -1,0 +1,23 @@
+transaction_datetime: the time of the transaction
+transaction_type_en: the transaction type whether it is Sales, Mortgage or Gift
+transaction_subtype_en: transaction sub type 
+registration_type_en: registration condition whether it is Off-plan or Ready 
+is_freehold_text: is free hold but as text Non Free Hold and Free Hold 
+property_usage_en: this indicates what is the usuage of the property is residential commercial and so on.
+amount: the total value of the transaction 
+total_buyer: how many buyers were in the deal
+total_seller: how many sellers were in the deal
+property_size_sqm: how much the actual property area covered in sqm
+is_offplan: indicator for the property sold is it offplan(t) or ready(f)
+is_freehold: indicator for the property sold is it Free Hold(t) or Non Free Hold(f)
+property_type_en: the type of the property sold (unit, land, building, etc..)
+property_subtype_en: the property subtype
+rooms_en: the type of and the number of rooms in the property (1 B/R	2 B/R	3 B/R	Studio	NA	4 B/R	5 B/R	(Blank)  6 B/R	Office	PENTHOUSE	Shop	7 B/R	Single Room	Hotel
+)
+parking: this contains the number of parkings, or the names of the parking associated with the property comma seperated
+project_name_en: the project name that contains the property
+area_en: the area name where the property exists
+nearest_landmark_en: nearest landmark name
+nearest_metro_en: nearest metro name
+nearest_mall_en: nearest mall name
+master_project_en: master project name

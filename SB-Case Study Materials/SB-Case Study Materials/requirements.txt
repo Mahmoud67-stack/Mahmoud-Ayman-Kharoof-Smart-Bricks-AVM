@@ -7,3 +7,7 @@ keras==3.6.0
 pandas
 numpy
 pyarrow
+matplotlib
+xgboost
+bayesian-optimization
+seaborn

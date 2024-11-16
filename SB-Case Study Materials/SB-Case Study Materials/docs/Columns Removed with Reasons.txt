@@ -1,0 +1,57 @@
+# Columns to remove for the first CSV
+rentals_columns_to_remove = [
+    'total_properties', #
+    'contract_amount', # This indicates the amount as per the contract there is no use for this for the valuation we care about the annual one
+    'ejari_contract_number',  # Unique identifier for the contract; not needed for analysis
+    'version_text',  # Duplicate column
+    'is_freehold_text',  # Duplicate column
+    'property_type_ar',  # Arabic names not needed
+    'property_subtype_ar',  # Arabic names not needed
+    'property_usage_ar',  # Arabic names not needed
+    'property_usage_id',  # All values are 0
+    'project_name_ar',  # Arabic names not needed
+    'area_ar',  # Arabic names not needed
+    'area_id',  # All values are 0
+    'parcel_id',  # Unique identifier for the parcel; not needed for analysis
+    'property_id',  # All values are 0
+    'land_property_id',  # All values are 0
+    'nearest_landmark_ar',  # Arabic names not needed
+    'nearest_metro_ar',  # Arabic names not needed
+    'nearest_mall_ar',  # Arabic names not needed
+    'master_project_ar',  # Arabic names not needed
+    'ejari_property_type_id',  # All values are 0
+    'ejari_property_sub_type_id',  # All values are 0
+    'entry_id',  # Values don't indicate anything
+    'meta_ts',  # Values don't indicate anything
+    'req_from',  # Useless dates
+    'total_properties', #this is indicates how many properties rented in according to the contract for the same details of rented property
+    'req_to'  # Useless dates
+]
+
+# Columns to remove for the second CSV
+transactions_columns_to_remove = [
+    'transaction_size_sqm': #how much transaction area covered in sqm
+    'transaction_number',  # Unique identifier for the transaction; not needed for analysis
+    'transaction_subtype_id',  # All values are 0
+    'property_id',  # All values are 0
+    'property_type_ar',  # Arabic property type; not needed for analysis
+    'property_type_id',  # All values are 0
+    'property_subtype_ar',  # Arabic property subtype; not needed for analysis
+    'property_subtype_id',  # All values are 0
+    'building_age',  # All values are 0
+    'rooms_ar',  # Arabic description of rooms; not needed for analysis
+    'project_name_ar',  # Arabic project name; not needed for analysis
+    'area_ar',  # Arabic area name; not needed for analysis
+    'area_id',  # All values are 0
+    'nearest_landmark_ar',  # Arabic nearest landmark; not needed for analysis
+    'nearest_metro_ar',  # Nearest metro in Arabic; not needed for analysis
+    'nearest_mall_ar',  # Nearest mall in Arabic; not needed for analysis
+    'master_project_ar',  # Arabic master project name; not needed for analysis
+    'entry_id',  # Unique entry identifier; does not provide meaningful information
+    'meta_ts',  # Timestamp metadata; not needed for analysis
+    'parcel_id',  # Unique identifier for the parcel; not needed for analysis
+    'req_from',  # Useless dates
+    'req_to',  # Useless dates
+    'transaction_type_id',  # Encoding of the transaction type; text version is available
+    'property_usage_id'  # Indicates the ID for property usage; text version is available
+]

@@ -1,4 +1,4 @@
-# Columns to remove for the first CSV
+# Columns to remove for the rental CSV
 rentals_columns_to_remove = [
     'total_properties', #
     'contract_amount', # This indicates the amount as per the contract there is no use for this for the valuation we care about the annual one
@@ -28,7 +28,7 @@ rentals_columns_to_remove = [
     'req_to'  # Useless dates
 ]
 
-# Columns to remove for the second CSV
+# Columns to remove for the transactions CSV
 transactions_columns_to_remove = [
     'transaction_size_sqm': #how much transaction area covered in sqm
     'transaction_number',  # Unique identifier for the transaction; not needed for analysis

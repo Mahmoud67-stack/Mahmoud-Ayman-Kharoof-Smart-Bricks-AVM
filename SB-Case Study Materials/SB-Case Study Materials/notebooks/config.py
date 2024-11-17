@@ -74,16 +74,16 @@ MODEL_PARAMS = {
         }
     },
     'svr': {
-        'pbounds': {
-            'C': (0.5, 10),
-            'epsilon': (0.05, 0.3),
-        },
-        'default_params': {
-            'gamma': 'scale',
-            'kernel': 'rbf',
-            'cache_size': 1000
+            'pbounds': {
+                'C': (0.1, 100.0),
+                'epsilon': (0.01, 1.0),
+                'gamma': (0.001, 1.0)  # Add gamma bounds
+            },
+            'default_params': {
+                'kernel': 'rbf',
+                'cache_size': 1000
+            }
         }
-    }
 }
 
 # Optimized Meta-learner parameters

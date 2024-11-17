@@ -1,0 +1,25 @@
+
+Model Evaluation Report - Sale Model
+================================================
+
+Metrics Summary:
+---------------
+RMSE: 25080876.23
+R² Score: -0.0131
+MAE: 2942674.37
+MSE: 629050352334975.62
+MAPE: 87.48%
+Explained Variance: 0.0008
+
+Additional Statistics:
+--------------------
+Number of samples: 162806
+Mean of actual values: 3275140.09
+Mean of predicted values: 339233.53
+Standard deviation of residuals: 24908448.47
+
+Plots generated:
+--------------
+- Residual plot: plots/sale_residuals.png
+- Residuals distribution: plots/sale_residuals_dist.png
+- Actual vs Predicted: plots/sale_actual_vs_predicted.png

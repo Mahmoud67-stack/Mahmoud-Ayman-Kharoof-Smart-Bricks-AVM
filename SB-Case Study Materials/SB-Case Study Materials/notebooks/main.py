@@ -4,12 +4,12 @@ from datetime import datetime
 import pandas as pd
 
 # Import from other modules
-from notebooks.preprocess import preprocess_data
-from notebooks.feature_selection import load_data, combine_selected_features
-from notebooks.base_models import load_and_prepare_data, train_and_save_models
-from notebooks.meta_learner import MetaLearner
-from notebooks.evaluation import evaluate_model
-from notebooks.config import (
+from preprocess import preprocess_data
+from feature_selection import load_data, combine_selected_features
+from base_models import load_and_prepare_data, train_and_save_models
+from meta_learner import MetaLearner
+from evaluation import evaluate_model
+from config import (
     DATA_FILES, LOGGING_CONFIG, DATA_DIR, MODELS_DIR, LOGS_DIR,
     EVALUATION, RANDOM_SEED
 )
@@ -75,14 +75,8 @@ def evaluate_models(X, y, meta_learner, model_type):
     # Make predictions
     predictions = meta_learner.predict(X)
     
-    # Evaluate using the evaluation module with config parameters
-    metrics = evaluate_model(
-        y, 
-        predictions, 
-        model_type,
-        metrics_list=EVALUATION['metrics'],
-        cv_folds=EVALUATION['cv_folds']
-    )
+    # Evaluate using the evaluation module
+    metrics = evaluate_model(y, predictions, model_type)
     
     # Save results to reports directory
     results_file = os.path.join(LOGS_DIR, f'{model_type}_evaluation_results.txt')

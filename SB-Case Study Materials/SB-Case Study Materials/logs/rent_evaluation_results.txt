@@ -1,0 +1,7 @@
+Rent Model Metrics:
+RMSE: 1094005.2151
+R2: 0.6056
+MAE: 295728.5223
+MSE: 1196847410558.3777
+MAPE: inf
+Explained_Variance: 0.6057

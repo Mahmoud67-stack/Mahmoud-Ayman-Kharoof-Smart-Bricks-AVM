@@ -227,11 +227,11 @@ def preprocess_data(input_file, output_file, columns_to_remove, model_type):
     """
     Main preprocessing function with error handling
     Workflow:
-    1. Read CSV from data directory
-    2. Convert to parquet (raw)
+    1. Read CSV or parquet from data directory
+    2. Convert to parquet (raw) if from CSV
     3. Process the data
     4. Save processed parquet
-    5. Delete original CSV
+    5. Delete original CSV if it exists
     """
     try:
         model_config = DATA_FILES[model_type]
@@ -241,21 +241,26 @@ def preprocess_data(input_file, output_file, columns_to_remove, model_type):
         raw_parquet = input_csv.replace('.csv', '.parquet')
         processed_parquet = os.path.join(DATA_DIR, model_config['output'])
 
-        # Check if input CSV exists
-        if not os.path.isfile(input_csv):
-            print(f"Input CSV file {input_csv} does not exist. Skipping preprocessing.")
-            return
+        # Check for input files
+        if os.path.isfile(input_csv):
+            print(f"Reading CSV file: {input_csv}")
+            data = pd.read_csv(input_csv)
+            
+            # Save raw parquet
+            print(f"Converting to raw parquet: {raw_parquet}")
+            os.makedirs(os.path.dirname(raw_parquet), exist_ok=True)
+            data.to_parquet(raw_parquet, index=False, engine='pyarrow')
+            
+            # Clean up CSV after conversion
+            print(f"Cleaning up: Removing original CSV file")
+            os.remove(input_csv)
+        elif os.path.isfile(raw_parquet):
+            print(f"Reading existing parquet file: {raw_parquet}")
+            data = pd.read_parquet(raw_parquet)
+        else:
+            raise FileNotFoundError(f"Neither input CSV ({input_csv}) nor parquet ({raw_parquet}) file exists.")
 
         print(f"\nStarting preprocessing for {model_type} data...")
-        print(f"Reading CSV file: {input_csv}")
-        
-        # Step 1: Read CSV
-        data = pd.read_csv(input_csv)
-        
-        # Step 2: Save raw parquet
-        print(f"Converting to raw parquet: {raw_parquet}")
-        os.makedirs(os.path.dirname(raw_parquet), exist_ok=True)
-        data.to_parquet(raw_parquet, index=False, engine='pyarrow')
         
         # Step 3: Process the data
         print("Processing data...")
@@ -272,10 +277,6 @@ def preprocess_data(input_file, output_file, columns_to_remove, model_type):
         print(f"Saving processed parquet: {processed_parquet}")
         os.makedirs(os.path.dirname(processed_parquet), exist_ok=True)
         data.to_parquet(processed_parquet, index=False, engine='pyarrow')
-
-        # Step 5: Delete original CSV
-        print(f"Cleaning up: Removing original CSV file")
-        os.remove(input_csv)
 
         print(f"\nSuccessfully processed {model_type} data:")
         print(f"Number of rows: {len(data)}")

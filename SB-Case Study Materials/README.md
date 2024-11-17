@@ -102,7 +102,7 @@ docker run -it avm-app
 ```
 
 ## 🧮 Technical Details
-PLEASE NOTE THAT FOR MORE DETAILED EXPLENTATION TO MY APPROACH PLEASE GO TO THE "Mahmoud Ayman Kharoof Smart Bricks Automated Valuation Model (AVM) - Project Documentation.docx" DOCUMENT THAT OUTLINES EVERYTHING I TOKE IN MY APPROACH, ALSO "Columns Removed with Reasons.txt" FOR COLUMNS I REMOVED WITH THE REASON OF REMOVAL FOR BOTH SALE AND RENTAL DATA, "Rental Data columns Used and explenation.txt" WHICH CONTAINS THE RENTAL COLUMNS THAT I KEPT AND WHY I KEPT THEM, AND "Transaction Data columns Used and explenation.txt" WHICH CONTAINS ALL SALE TRANSACTION COLUMNS THAT I KEPT AND WHY I KEPT THEM.
+PLEASE NOTE THAT FOR MORE DETAILED EXPLENTATION TO MY APPROACH PLEASE GO TO THE "Mahmoud Ayman Kharoof Smart Bricks Automated Valuation Model (AVM) - Project Documentation.docx" DOCUMENT THAT OUTLINES EVERYTHING I TOKE IN MY APPROACH, ALSO "Columns Removed with Reasons.txt" FOR COLUMNS I REMOVED WITH THE REASON OF REMOVAL FOR BOTH SALE AND RENTAL DATA, "Rental Data columns Used and explenation.txt" WHICH CONTAINS THE RENTAL COLUMNS THAT I KEPT AND WHY I KEPT THEM, AND "Transaction Data columns Used and explenation.txt" WHICH CONTAINS ALL SALE TRANSACTION COLUMNS THAT I KEPT AND WHY I KEPT THEM. ALL THESE DOCUMENTS EXIST HERE https://github.com/Mahmoud67-stack/Mahmoud-Ayman-Kharoof-Smart-Bricks-AVM/tree/main/SB-Case%20Study%20Materials/docs
 
 ### Data Processing Pipeline
 

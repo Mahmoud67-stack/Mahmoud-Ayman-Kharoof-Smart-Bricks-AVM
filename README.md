@@ -29,8 +29,10 @@ notebooks/
 └── test.py              # Unit tests
 
 data/
-├── sales.csv        # Sales data
-└── rentals.csv      # Rentals data
+├── snp_dld_2024_transactions.parquet       # Sales data raw I changed it from csv to parquet to reduce storage consumption
+├── snp_dld_2024_transactions_cleaned.parquet      # Sales data cleaned
+├── snp_dld_2024_rents.parquet      # Rent data raw I changed it from csv to parquet to reduce storage consumption
+└── snp_dld_2024_rents_cleaned.parquet # Rent data cleaned
 Dockerfile            # Docker container setup
 README.md            # Documentation
 ```
@@ -67,8 +69,8 @@ newgrp docker
 
 1. **Clone the repository**
 ```bash
-git clone <repository-url>
-cd dubai-real-estate-avm
+git clone https://github.com/Mahmoud67-stack/Mahmoud-Ayman-Kharoof-Smart-Bricks-AVM.git
+cd Mahmoud-Ayman-Kharoof-Smart-Bricks-AVM
 ```
 
 2. **Set up Python environment**

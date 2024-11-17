@@ -69,8 +69,8 @@ newgrp docker
 
 1. **Clone the repository**
 ```bash
-git clone <repository-url>
-cd dubai-real-estate-avm
+git clone [<repository-url>](https://github.com/Mahmoud67-stack/Mahmoud-Ayman-Kharoof-Smart-Bricks-AVM.git)
+cd Mahmoud-Ayman-Kharoof-Smart-Bricks-AVM
 ```
 
 2. **Set up Python environment**

@@ -102,6 +102,7 @@ docker run -it avm-app
 ```
 
 ## 🧮 Technical Details
+PLEASE NOTE THAT FOR MORE DETAILED EXPLENTATION TO MY APPROACH PLEASE GO TO THE "Mahmoud Ayman Kharoof Smart Bricks Automated Valuation Model (AVM) - Project Documentation.docx" DOCUMENT THAT OUTLINES EVERYTHING I TOKE IN MY APPROACH, ALSO "Columns Removed with Reasons.txt" FOR COLUMNS I REMOVED WITH THE REASON OF REMOVAL FOR BOTH SALE AND RENTAL DATA, "Rental Data columns Used and explenation.txt" WHICH CONTAINS THE RENTAL COLUMNS THAT I KEPT AND WHY I KEPT THEM, AND "Transaction Data columns Used and explenation.txt" WHICH CONTAINS ALL SALE TRANSACTION COLUMNS THAT I KEPT AND WHY I KEPT THEM.
 
 ### Data Processing Pipeline
 
@@ -110,7 +111,7 @@ The system processes two main types of real estate data:
 - Sales Transaction Data
 
 #### Processing Steps:
-1. Load raw data (CSV/Parquet)
+1. Load raw data (CSV/Parquet), I used Parquet instead of CSV because the storage consumption for CSV was to high also very slow
 2. Clean and standardize
 3. Handle missing values
 4. Process special columns
@@ -118,9 +119,111 @@ The system processes two main types of real estate data:
 6. Encode categoricals
 7. Scale numericals
 
+Columns that I removed and why?
+```bash
+rentals_columns_to_remove = [
+    'total_properties', #
+    'contract_amount', # This indicates the amount as per the contract there is no use for this for the valuation we care about the annual one
+    'ejari_contract_number',  # Unique identifier for the contract; not needed for analysis
+    'version_text',  # Duplicate column
+    'is_freehold_text',  # Duplicate column
+    'property_type_ar',  # Arabic names not needed
+    'property_subtype_ar',  # Arabic names not needed
+    'property_usage_ar',  # Arabic names not needed
+    'property_usage_id',  # All values are 0
+    'project_name_ar',  # Arabic names not needed
+    'area_ar',  # Arabic names not needed
+    'area_id',  # All values are 0
+    'parcel_id',  # Unique identifier for the parcel; not needed for analysis
+    'property_id',  # All values are 0
+    'land_property_id',  # All values are 0
+    'nearest_landmark_ar',  # Arabic names not needed
+    'nearest_metro_ar',  # Arabic names not needed
+    'nearest_mall_ar',  # Arabic names not needed
+    'master_project_ar',  # Arabic names not needed
+    'ejari_property_type_id',  # All values are 0
+    'ejari_property_sub_type_id',  # All values are 0
+    'entry_id',  # Values don't indicate anything
+    'meta_ts',  # Values don't indicate anything
+    'req_from',  # Useless dates
+    'total_properties', #this is indicates how many properties rented in according to the contract for the same details of rented property
+    'req_to'  # Useless dates
+]
+```
+
+```bash
+transactions_columns_to_remove = [
+    'transaction_size_sqm': #how much transaction area covered in sqm
+    'transaction_number',  # Unique identifier for the transaction; not needed for analysis
+    'transaction_subtype_id',  # All values are 0
+    'property_id',  # All values are 0
+    'property_type_ar',  # Arabic property type; not needed for analysis
+    'property_type_id',  # All values are 0
+    'property_subtype_ar',  # Arabic property subtype; not needed for analysis
+    'property_subtype_id',  # All values are 0
+    'building_age',  # All values are 0
+    'rooms_ar',  # Arabic description of rooms; not needed for analysis
+    'project_name_ar',  # Arabic project name; not needed for analysis
+    'area_ar',  # Arabic area name; not needed for analysis
+    'area_id',  # All values are 0
+    'nearest_landmark_ar',  # Arabic nearest landmark; not needed for analysis
+    'nearest_metro_ar',  # Nearest metro in Arabic; not needed for analysis
+    'nearest_mall_ar',  # Nearest mall in Arabic; not needed for analysis
+    'master_project_ar',  # Arabic master project name; not needed for analysis
+    'entry_id',  # Unique entry identifier; does not provide meaningful information
+    'meta_ts',  # Timestamp metadata; not needed for analysis
+    'parcel_id',  # Unique identifier for the parcel; not needed for analysis
+    'req_from',  # Useless dates
+    'req_to',  # Useless dates
+    'transaction_type_id',  # Encoding of the transaction type; text version is available
+    'property_usage_id'  # Indicates the ID for property usage; text version is available
+]
+```
+Columns that I kept and why?
+Rental Data:
+- contract_start_date: This the date where the contract of the rental started at
+- contract_end_date: This the date where the contract of the rental will end on
+- version_number: This indicates the number of times the property was rented if 1 then it is the first time it is rented
+- annual_amount: This indicates the amount per year for the rented property
+- is_freehold: if the rental is freehold (t) or not (f)
+- property_size_sqm: the size of the property is sqm
+- property_type_en: this indicates the type of property rented.
+- property_subtype: this indicates the sub type of property rented.
+- property_usage_en : this indicates what is the usuage of the property is residential commercial and so on.
+- rooms: Number of rooms
+- parking: Number of Parkings
+- project_name_en : project name
+- area_en: area name
+- nearest_landmark_en : nearest landmark
+- nearest_metro_en : nearest metro
+- nearest_mall_en: nearest mall
+
+Transaction Data:
+- transaction_datetime: the time of the transaction
+- transaction_type_en: the transaction type whether it is Sales, Mortgage or Gift
+- transaction_subtype_en: transaction sub type 
+- registration_type_en: registration condition whether it is Off-plan or Ready 
+- is_freehold_text: is free hold but as text Non Free Hold and Free Hold 
+- property_usage_en: this indicates what is the usuage of the property is residential commercial and so on.
+- amount: the total value of the transaction 
+- total_buyer: how many buyers were in the deal
+- total_seller: how many sellers were in the deal
+- property_size_sqm: how much the actual property area covered in sqm
+- is_offplan: indicator for the property sold is it offplan(t) or ready(f)
+- is_freehold: indicator for the property sold is it Free Hold(t) or Non Free Hold(f)
+- property_type_en: the type of the property sold (unit, land, building, etc..)
+- property_subtype_en: the property subtype
+- rooms_en: the type of and the number of rooms in the property (1 B/R	2 B/R	3 B/R	Studio	NA	4 B/R	5 B/R	(Blank)  6 B/R	Office	PENTHOUSE	Shop	7 B/R	Single Room	Hotel
+)
+- parking: this contains the number of parkings, or the names of the parking associated with the property comma seperated
+- project_name_en: the project name that contains the property
+- area_en: the area name where the property exists
+- nearest_landmark_en: nearest landmark name
+- nearest_metro_en: nearest metro name
+- nearest_mall_en: nearest mall name
+- master_project_en: master project name
 
 ### Feature Selection
-
 The project employs multiple feature selection techniques:
 - Correlation analysis
 - Tree-based feature importance
